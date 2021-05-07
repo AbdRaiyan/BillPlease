@@ -123,13 +123,11 @@
         android:id="@+id/textViewTotalBill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:text="" />
 
     <TextView
         android:id="@+id/textViewEachPays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:text="" />
 </LinearLayout>

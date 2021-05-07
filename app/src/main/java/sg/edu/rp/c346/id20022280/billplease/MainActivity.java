@@ -12,16 +12,16 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText amt;
-    EditText numppl;
-    ToggleButton svs;
-    ToggleButton gst;
-    EditText discount;
-    RadioGroup paytype;
-    Button split;
-    Button reset;
-    TextView totalbill;
-    TextView eachpay;
+    EditText numAmt;
+    EditText numPpl;
+    ToggleButton togglesvs;
+    ToggleButton togglegst;
+    EditText textdiscount;
+    RadioGroup rgpaytype;
+    Button btsplit;
+    Button btreset;
+    TextView tvtotalbill;
+    TextView tveachpay;
 
 
     @Override
@@ -29,39 +29,64 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        amt = findViewById(R.id.editTextNumAmt);
-        numppl = findViewById(R.id.editTextNumPpl);
-        svs = findViewById(R.id.toggleSVS);
-        gst = findViewById(R.id.toggleGST);
-        discount = findViewById(R.id.editTextDiscount);
-        paytype = findViewById(R.id.radiogroupPayType);
-        split = findViewById(R.id.buttonSplit);
-        reset = findViewById(R.id.buttonReset);
-        totalbill = findViewById(R.id.textViewTotalBill);
-        eachpay = findViewById(R.id.textViewEachPays);
+        numAmt = findViewById(R.id.editTextNumAmt);
+        numPpl = findViewById(R.id.editTextNumPpl);
+        togglesvs = findViewById(R.id.toggleSVS);
+        togglegst = findViewById(R.id.toggleGST);
+        textdiscount = findViewById(R.id.editTextDiscount);
+        rgpaytype = findViewById(R.id.radiogroupPayType);
+        btsplit = findViewById(R.id.buttonSplit);
+        btreset = findViewById(R.id.buttonReset);
+        tvtotalbill = findViewById(R.id.textViewTotalBill);
+        tveachpay = findViewById(R.id.textViewEachPays);
 
-            split.setOnClickListener(new View.OnClickListener() {
+            btsplit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //gst & svs check
-                    boolean gsttrue = false;
-                    boolean svstrue = false;
+                    double totalmult = 1.0;
 
-                    if(gst.isChecked()){
-                        gsttrue=true;
-                    }else{
-                        gsttrue=false;
+                    //Number Retrieval
+                    double amount = Double.parseDouble(numAmt.getText().toString());
+                    int numpeople = Integer.parseInt(numPpl.getText().toString());
+                    double discount = Double.parseDouble(textdiscount.getText().toString());
+
+
+                    //calculate gst
+                    double gst = 0.07;
+                    double servicech = 0.10;
+
+                    if(togglegst.isChecked()){
+                        totalmult += gst;
+                    }
+                    if(togglesvs.isChecked()){
+                        totalmult += servicech;
                     }
 
-                    if(svs.isChecked()){
-                        svstrue=true;
-                    }else{
-                        svstrue=false;
+                    //calculate discount
+                    discount =  (100-discount)/100;
+                    System.out.println(amount);
+                    System.out.println(numpeople);
+
+
+
+                    double totalval = (amount*discount)*totalmult;
+
+                    double perperson = totalval/numpeople;
+
+                    String textTotalBill = String.format("Total bill: $%.2f",totalval);
+                    String textEachPay = String.format("Each Pay: $%.2f",perperson);
+
+
+                    int checkedRadioId = rgpaytype.getCheckedRadioButtonId();
+                    if(checkedRadioId == R.id.radioButtonCash){
+                        textEachPay += " in cash";
+                    } else {
+                        textEachPay += " via PayNow to 91234567";
                     }
 
-                    //
-
+                    tvtotalbill.setText(textTotalBill);
+                    tveachpay.setText(textEachPay);
                 }
             }
         );
